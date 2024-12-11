@@ -1,5 +1,8 @@
 {
     "name": "nssean/flexi",
+    "description": "A flexible system to dynamically manage methods, override them, insert hooks and integrate them into PHP application logic, giving you full control over its operation.",
+    "type": "library",
+    "license": "CC-BY-NC-4.0",
     "autoload": {
         "psr-4": {
             "Flexi\\": "src/"
