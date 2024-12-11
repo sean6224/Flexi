@@ -7,7 +7,7 @@ To start using the hook system, you need to use the HookHandler class, which all
 Below is an example of registering hooks:
 
 ```php
-use Nex\System\Hook\HookHandler;
+use Flexi\Hook\HookHandler;
 
 $hookHandler = new HookHandler();
 
@@ -41,9 +41,9 @@ Final result: MainResult
 Attributes **`HookBefore`** and **`HookAfter`** allow you to mark class methods as hooks:
 
 ```php
-use Nex\System\Hook\Hook;
-use Nex\System\Attributes\Hook\HookBefore;
-use Nex\System\Attributes\Hook\HookAfter;
+use Flexi\Hook\Hook;
+use Flexi\Attributes\Hook\HookBefore;
+use Flexi\Attributes\Hook\HookAfter;
 
 class UserHook extends Hook
 {

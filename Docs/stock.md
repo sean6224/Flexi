@@ -1,12 +1,15 @@
-StockHandler to klasa odpowiedzialna za zarządzanie metodami w aplikacji, które są oznaczone specjalnym atrybutem Stock. Umożliwia to rejestrowanie, wywoływanie, a także nadpisywanie metod w locie, zapewniając elastyczność i kontrolę nad logiką aplikacji. Dzięki refleksji w PHP, StockHandler może dynamicznie rejestrować metody i pozwalać na ich późniejsze wywoływanie lub nadpisywanie bez konieczności modyfikacji samego kodu metod.
+## Stock: Overriding methods in classes
 
-## Rejestrowanie metod
-Jak rejestrować metody?
-Aby zarejestrować metodę w systemie StockHandler, należy ją oznaczyć atrybutem Stock. Atrybut ten przypisuje nazwę metody, która będzie używana później do jej wywoływania.
+This mechanism allows dynamic management of methods in the application, which have been marked with a special Stock attribute. It allows methods to be registered, called and overridden at runtime in the application. This approach provides flexibility and full control over program logic, allowing the application's behavior to be changed without modifying the original method code.
 
-Przykład:
+## Method registration
+How to register methods?
+To register a method in StockHandler, you need to tag it with the Stock attribute. This attribute assigns a name to the method, which will be used later to call it.
+
+Example:
 ```php
-use Nex\System\Attributes\Stock;
+use Flexi\Attributes\Stock;
+use Flexi\Stock\StockHandler;
 
 class TestStock extends StockHandler
 {
@@ -16,21 +19,21 @@ class TestStock extends StockHandler
     }
 }
 ```
-W powyższym przykładzie, metoda likeYou jest rejestrowana pod nazwą 'likeYou' w systemie StockHandler.
+In the above example, the likeYou method is registered under the name 'likeYou' in the StockHandler system.
 
-## Wywoływanie metod
-Aby wywołać zarejestrowaną metodę, należy użyć metody call z klasy StockHandler, przekazując jej nazwę metody oraz opcjonalne argumenty.
+## Calling methods
+To call a registered method, use the call method from the StockHandler class, passing it the method name and optional arguments.
 
-Przykład:
+Example:
 ```php
 $stockHandler = new TestStock();
 echo $stockHandler->call('likeYou', 'Jane');
 ```
 
-## Nadpisywanie metod
-StockHandler umożliwia nadpisywanie zarejestrowanych metod za pomocą metody overrideMethod. Dzięki temu można zmienić logikę danej metody w locie, bez konieczności zmiany kodu samej klasy.
+## Overriding methods
+StockHandler allows you to override registered methods using the overrideMethod method. This allows you to change the logic of a method on the fly, without having to change the code of the class itself.
 
-Przykład:
+Example:
 ```php
 $stockHandler->overrideMethod('likeYou', function ($name) {
     return "I No love you, $name!";
@@ -39,7 +42,7 @@ $stockHandler->overrideMethod('likeYou', function ($name) {
 echo $stockHandler->call('likeYou', 'Tom'); // Outputs: I No love you, Tom!
 ```
 
-Po wywołaniu metody overrideMethod, metoda likeYou zostaje nadpisana, a jej nowa logika jest wywoływana przy każdym kolejnym wywołaniu.
+When the overrideMethod is called, the likeYou method is overwritten, and its new logic is called each time it is called again.
 
-## Podsumowanie
-StockHandler to potężne narzędzie do dynamicznego zarządzania metodami w aplikacjach PHP. Dzięki atrybutom Stock programiści mogą w prosty sposób rejestrować metody, wywoływać je na podstawie nazw, a także nadpisywać ich logikę w locie. W połączeniu z metodą overrideMethod, StockHandler pozwala na pełną kontrolę nad logiką aplikacji.
+## Summary
+StockHandler is a powerful tool for dynamically managing methods in PHP applications. With Stock attributes, you can easily register methods, call them based on their names, and override their logic on the fly. Combined with overrideMethod, StockHandler allows full control over application logic.

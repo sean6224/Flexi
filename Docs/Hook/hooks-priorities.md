@@ -49,7 +49,7 @@ Order of call:
 
 ## Example of using hooks with priorities
 ```php
-use Nex\System\Hook\HookHandler;
+use Flexi\Hook\HookHandler;
 
 $hookHandler = new HookHandler();
 

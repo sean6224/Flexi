@@ -5,7 +5,7 @@ Dynamic allows us to create objects that can have methods and properties dynamic
 ## Adding methods
 To start using Dynamic, you need to add a method to an object using the addMethod function. The example below shows how to register methods:
 ```php
-use Nex\System\Dynamic\DynamicClass;
+use Flexi\Dynamic\DynamicClass;
 
 $dynamicObject = new DynamicClass();
 $username = 'user';
@@ -36,7 +36,7 @@ In this example:
 
 Example in class:
 ```php
-use Nex\System\Dynamic\DynamicClass;
+use Flexi\Dynamic\DynamicClass;
 
 class UserDynamic extends DynamicClass
 {
