@@ -1,1 +1,5 @@
 /vendor/
+/.idx/
+.dockerignore
+Dockerfile
+index.php
