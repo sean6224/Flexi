@@ -1,0 +1,8 @@
+{
+    "name": "nssean/flexi",
+    "autoload": {
+        "psr-4": {
+            "Flexi\\": "src/"
+        }
+    }
+}
