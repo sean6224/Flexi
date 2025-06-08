@@ -1,86 +1,98 @@
-## Dynamic: Dynamic addition of methods and properties.
-Dynamic allows us to create objects that can have methods and properties dynamically added as the application runs. This allows us to flexibly extend the functionality of objects according to current needs.
+# 🧠 Flexi Dynamic: Dynamically Adding Methods to Objects
+Flexi\Dynamic allows you to add methods dynamically to objects at runtime. This makes it possible to flexibly extend class behavior without modifying or subclassing them — ideal for plugins, testing, or modular architectures.
 
+## ✅ Registering Methods at Runtime
+To start using dynamic methods, include the DynamicMethodAwareTrait in your class and use the registerMethod function to attach a method.
 
-## Adding methods
-To start using Dynamic, you need to add a method to an object using the addMethod function. The example below shows how to register methods:
+### 🔧 Example Usage
 ```php
-use Flexi\Dynamic\DynamicClass;
+use Flexi\Dynamic\Traits\DynamicMethodAwareTrait;
 
-$dynamicObject = new DynamicClass();
-$username = 'user';
-$password = 'usessds';
-
-$dynamicObject->addMethod('validateUserData', function (string $username, string $password): bool {
-    return !empty($username) && strlen($password) >= 8;
-});
-
-if (!$dynamicObject->validateUserData($username, $password)) {
-    echo 'Invalid username or password';
-    return;
-}
-
-```
-Example of the result of above code:
-```php
-Invalid username or password
-```
-
-In this example:
-- We create a **`DynamicClass`** object.
-- We add a method **`validateUserData`** that verifies the user data.
-- We call the dynamically added method on the object.
-
-# Adding methods to classes
-**`DynamicClass`** allows you to extend methods in inheriting classes. You can add new methods to classes inheriting from **`DynamicClass`** as if they were part of this class.
-
-Example in class:
-```php
-use Flexi\Dynamic\DynamicClass;
-
-class UserDynamic extends DynamicClass
+class MagicService
 {
-    public function hello()
+    use DynamicMethodAwareTrait;
+
+    public function __construct()
     {
-        return "Hello, world!";
+        $this->registerMethod(
+            'greet',
+            fn(string $name): string => "Hello, {$name}",
+            ['description' => 'Greets the user'],
+            'string',
+            ['string']
+        );
     }
 }
 
-$user = new UserDynamic();
-$user->addMethod('sayGoodbye', function () {
-    return "Goodbye!";
+$service = new MagicService();
+echo $service->greet('Zarin'); // Hello, Zarin
+```
+
+### 🧩 What's happening here?
+> The greet method is registered at runtime using registerMethod.
+> 
+> Thanks to the __call magic method, you can invoke the dynamic method like any regular class method.
+
+# 🧪 Type & Metadata Support
+Each method can optionally include:
+- Return type (returnType)
+- Parameter types (parameterTypes)
+- Metadata like a description or tags
+```php
+$service->registerMethod(
+    'sum',
+    fn(int $a, int $b): int => $a + $b,
+    ['description' => 'Adds two numbers'],
+    'int',
+    ['int', 'int']
+);
+```
+
+# 📋 Accessing Method Info
+You can list all dynamic methods or fetch specific metadata:
+```php
+$methods = $service->getMethods();
+$meta = $service->getMethodMetadata('greet');
+
+print_r($methods); // ['greet', 'sum']
+print_r($meta);    // ['description' => 'Greets the user']
+```
+
+# 🏗️ Using in Real Classes
+The trait integrates seamlessly into existing classes:
+```php
+class ReportGenerator
+{
+    use DynamicMethodAwareTrait;
+
+    public function baseReport(): string
+    {
+        return "Base Report";
+    }
+}
+
+$report = new ReportGenerator();
+
+$report->registerMethod('extendedReport', function () {
+    return "Extended Report with Data";
 });
 
-echo $user->hello();       // Outputs: Hello, world!
-echo $user->sayGoodbye();  // Outputs: Goodbye!
+echo $report->baseReport();       // Base Report
+echo $report->extendedReport();   // Extended Report with Data
 ```
 
-In this example:
-- The **`UserDynamic`** class inherits from **`DynamicClass`** and has a built-in **`hello`** method.
-- We dynamically add the **`sayGoodbye`** method and call both methods.
+## 💡 Use Cases
+>-  Plugin systems: Dynamically add behaviors based on runtime conditions or configuration.
+>
+>- Testing: Inject mock methods directly into objects.
+>
+>- Modular architecture: Register features or commands at runtime via configs (JSON, YAML, DB).
+>
+>- Prototyping: Quickly experiment with object behavior without touching core logic.
 
-## Dynamic properties
-**`DynamicClass`** also allows you to add properties to objects as the application runs. Properties are managed using the magic methods **`__get`**, **`__set`**, **`__isset`** and **`__unset`**.
-
-## Example of dynamic properties
-```php
-$user = new UserDynamic();
-$user->username = 'john_doe';  // dynamic property
-
-echo $user->username; // Outputs: john_doe
-```
-
-In this example:
-- We add the dynamic property username to the **`UserDynamic`** object.
-This property can be accessed via magic methods.
-
-## Application
-- Extending application functionality: Adding new methods and properties as the application runs, allowing great flexibility in customizing object logic.
-
-- Creating flexible objects: Objects that can change their behavior at execution time, ideal for dynamic environments.
-
-- Testing and modularity: Allows you to create more flexible classes that can be easily modified during testing or as the application runs.
-
-# ⚠️ Important
-- There is some performance cost to using **`DynamicClass** because objects must support dynamic methods and properties.
-- Keep in mind that dynamic addition of methods and properties should be used only when the specifics of the application require it.
+# ⚠️ Notes & Considerations
+>There is a small performance overhead when using dynamic methods.
+>
+>Type validation is manual — PHP does not enforce types at runtime; NewMethodRegistry can optionally implement custom checks.
+>
+>Use this flexibility wisely — dynamic behavior is powerful but can lead to harder-to-trace bugs if overused.

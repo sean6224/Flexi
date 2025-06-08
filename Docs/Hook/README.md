@@ -5,7 +5,5 @@ Hooks are a flexible mechanism that allows you to inject additional logic into y
 This documentation aims to show you how to configure, use and extend hooks in PHP, giving you full control over your application processes and allowing you to customize them.
 
 ## Table of Contents:
-
-- **[Hook Configuration](hook-config.md)**: Instructions for configuring hooks, including the use of `HookBefore` and `HookAfter` attributes to control the order of calls.
-- **[Hook Priorities](hooks-priorities.md)**: A description of how to set the priorities of hooks, which determine the order in which they are executed.
-- **[Hook Dependency (Under Deployment)](hook-dependency.md)**: Manage dependencies between hooks to ensure they are called correctly in the correct order. This feature is under implementation and may change in the future.
+- **[Hook](Hook.md)**: Basic hook system supporting before & after hooks with priorities, attribute-based declarations, and automatic registration. Perfect for injecting modular logic without modifying core methods.
+- **[Hook Dependency](Hook-dependency.md)**: Manage dependencies between hooks to ensure they are called correctly in the correct order. This feature is under implementation and may change in the future.

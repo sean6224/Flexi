@@ -1,17 +1,17 @@
-## Stock: Overriding methods in classes
+# Flexi Stock: Dynamic Method Overriding at Runtime
+The **`StockOverride`** mechanism allows managing methods marked with the Stock attribute. With it, you can:
+- Register methods under a specific name,
+- Dynamically call these methods by name,
+- Override their implementation during runtime,
+- Save the overrides to disk.
 
-This mechanism allows dynamic management of methods in the application, which have been marked with a special Stock attribute. It allows methods to be registered, called and overridden at runtime in the application. This approach provides flexibility and full control over program logic, allowing the application's behavior to be changed without modifying the original method code.
-
-## Method registration
-How to register methods?
-To register a method in StockHandler, you need to tag it with the Stock attribute. This attribute assigns a name to the method, which will be used later to call it.
-
-Example:
+## Method Registration
+Mark a method with the **`#[Stock('nazwaMetody')]`** attribute to register it in the system:
 ```php
-use Flexi\Attributes\Stock;
-use Flexi\Stock\StockHandler;
+use Flexi\Stock\Core\Stock;
+use Flexi\Stock\Core\StockOverride;
 
-class TestStock extends StockHandler
+class TestStock extends StockOverride
 {
     #[Stock('likeYou')]
     public function likeYou(string $name): string {
@@ -19,30 +19,57 @@ class TestStock extends StockHandler
     }
 }
 ```
-In the above example, the likeYou method is registered under the name 'likeYou' in the StockHandler system.
 
-## Calling methods
-To call a registered method, use the call method from the StockHandler class, passing it the method name and optional arguments.
-
-Example:
+## Calling Methods
+Call registered methods via the **`call`** method:
 ```php
 $stockHandler = new TestStock();
 echo $stockHandler->call('likeYou', 'Jane');
 ```
 
-## Overriding methods
-StockHandler allows you to override registered methods using the overrideMethod method. This allows you to change the logic of a method on the fly, without having to change the code of the class itself.
-
-Example:
+## Overriding Methods
+You can override a method’s behavior without modifying the original class:
 ```php
 $stockHandler->overrideMethod('likeYou', function ($name) {
-    return "I No love you, $name!";
-});
+    return "I don't  love you, $name!";
+}, false);
 
-echo $stockHandler->call('likeYou', 'Tom'); // Outputs: I No love you, Tom!
+echo $stockHandler->call('likeYou', 'Tom'); // I don't love you, Tom!
 ```
 
-When the overrideMethod is called, the likeYou method is overwritten, and its new logic is called each time it is called again.
+## Methods with Multiple Parameters
+Supports any number of parameters and types:
+```php
+$stockHandler->overrideMethod('greet', function(string $p1, string $p2, string $p3) {
+    return "$p1 and $p2 are great, but $p3 is special!";
+}, false);
+
+echo $stockHandler->call('greet', 'Alice', 'Bob', 'Charlie');
+```
+
+## Saving Method Overrides
+### Single Override (immediate save to file)
+```php
+$stockHandler->overrideMethod('likeYou', function ($name) {
+    return "I'm sorry, no love you $name!";
+}, true);
+```
+
+### Save All Overrides at Once
+```php
+$stockHandler->overrideMethod('likeYou', function ($name) {
+    return "I appreciate you, $name!";
+});
+
+$stockHandler->overrideMethod('goodbye', function ($name) {
+    return "Goodbye, $name!";
+});
+
+$stockHandler->saveOverrides();
+```
 
 ## Summary
-StockHandler is a powerful tool for dynamically managing methods in PHP applications. With Stock attributes, you can easily register methods, call them based on their names, and override their logic on the fly. Combined with overrideMethod, StockHandler allows full control over application logic.
+- **`StockOverride`** is a powerful tool for dynamic method control in PHP,
+- You register methods via the Stock attribute,
+- You can call, override, and save changes without editing original classes,
+- Perfect for plugin systems, rule engines, and dynamic business logic.
